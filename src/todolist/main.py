@@ -20,11 +20,11 @@ class ToDoListCLI:
     def run(self):
         """Main application loop"""
         print("=== ToDoList Application ===")
-        print("مدیریت پروژه‌ها و وظایف")
+        print("Project and Task Management System")
 
         while True:
             self.show_main_menu()
-            choice = input("انتخاب شما: ").strip()
+            choice = input("Enter your choice: ").strip()
 
             if choice == "1":
                 self.create_project()
@@ -47,97 +47,98 @@ class ToDoListCLI:
             elif choice == "10":
                 self.show_project_stats()
             elif choice == "0":
-                print("خروج از برنامه. خداحافظ!")
+                print("Exiting program. Goodbye!")
                 break
             else:
-                print("⚠️  انتخاب نامعتبر. لطفاً مجدد تلاش کنید.")
+                print("⚠️  Invalid choice. Please try again.")
 
     def show_main_menu(self):
         """Display main menu options"""
-        print("\n--- منوی اصلی ---")
-        print("1. ایجاد پروژه جدید")
-        print("2. نمایش تمام پروژه‌ها")
-        print("3. ویرایش پروژه")
-        print("4. حذف پروژه")
-        print("5. ایجاد تسک جدید")
-        print("6. نمایش تسک‌های یک پروژه")
-        print("7. ویرایش تسک")
-        print("8. تغییر وضعیت تسک")
-        print("9. حذف تسک")
-        print("10. آمار پروژه")
-        print("0. خروج")
+        print("\n--- Main Menu ---")
+        print("1. Create New Project")
+        print("2. List All Projects")
+        print("3. Edit Project")
+        print("4. Delete Project")
+        print("5. Create New Task")
+        print("6. List Project Tasks")
+        print("7. Edit Task")
+        print("8. Change Task Status")
+        print("9. Delete Task")
+        print("10. Project Statistics")
+        print("0. Exit")
 
     def create_project(self):
         """Handle project creation"""
         try:
-            print("\n--- ایجاد پروژه جدید ---")
-            name = input("نام پروژه: ").strip()
-            description = input("توضیحات پروژه: ").strip()
+            print("\n--- Create New Project ---")
+            name = input("Project name: ").strip()
+            description = input("Project description: ").strip()
 
             project = self.project_service.create_project(name, description)
             message = (
-                f"✅ پروژه '{project.name}' با موفقیت ایجاد شد. " f"شناسه: {project.id}"
+                f"✅ Project '{project.name}' created successfully. " 
+                f"ID: {project.id}"
             )
             print(message)
 
         except ValidationError as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def list_projects(self):
         """Display all projects"""
-        print("\n--- لیست پروژه‌ها ---")
+        print("\n--- Projects List ---")
         projects = self.project_service.get_all_projects()
 
         if not projects:
-            print("📭 هیچ پروژه‌ای یافت نشد.")
+            print("📭 No projects found.")
             return
 
         for project in projects:
             project_tasks = self.task_service.get_tasks_by_project(project.id)
             tasks_count = len(project_tasks)
-            print(f"{project.id}: {project.name} - {tasks_count} تسک")
-            print(f"   توضیحات: {project.description}")
+            print(f"{project.id}: {project.name} - {tasks_count} tasks")
+            print(f"   Description: {project.description}")
             print("-" * 50)
 
     def update_project(self):
         """Handle project update"""
         try:
-            print("\n--- ویرایش پروژه ---")
-            project_id = int(input("شناسه پروژه: "))
+            print("\n--- Edit Project ---")
+            project_id = int(input("Project ID: "))
 
-            name = input("نام جدید پروژه: ").strip()
-            description = input("توضیحات جدید پروژه: ").strip()
+            name = input("New project name: ").strip()
+            description = input("New project description: ").strip()
 
             project = self.project_service.update_project(project_id, name, description)
-            print(f"✅ پروژه '{project.name}' با موفقیت بروزرسانی شد.")
+            print(f"✅ Project '{project.name}' updated successfully.")
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def delete_project(self):
         """Handle project deletion"""
         try:
-            print("\n--- حذف پروژه ---")
-            project_id = int(input("شناسه پروژه برای حذف: "))
+            print("\n--- Delete Project ---")
+            project_id = int(input("Project ID to delete: "))
 
             success = self.project_service.delete_project(project_id)
             if success:
-                print("✅ پروژه و تسک‌های مرتبط با موفقیت حذف شدند.")
+                print("✅ Project and related tasks deleted successfully.")
             else:
-                print("❌ پروژه یافت نشد.")
+                print("❌ Project not found.")
 
         except ValueError as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def create_task(self):
         """Handle task creation"""
         try:
-            print("\n--- ایجاد تسک جدید ---")
-            project_id = int(input("شناسه پروژه: "))
-            title = input("عنوان تسک: ").strip()
-            description = input("توضیحات تسک: ").strip()
+            print("\n--- Create New Task ---")
+            project_id = int(input("Project ID: "))
+            title = input("Task title: ").strip()
+            description = input("Task description: ").strip()
 
-            deadline_str = input("ددلاین (YYYY-MM-DD HH:MM یا خالی): ").strip()
+            deadline_str = input("Deadline (YYYY-MM-DD HH:MM or empty): ").strip()
             deadline = None
             if deadline_str:
                 deadline = datetime.strptime(deadline_str, "%Y-%m-%d %H:%M")
@@ -145,31 +146,31 @@ class ToDoListCLI:
             task = self.task_service.create_task(
                 project_id, title, description, deadline
             )
-            print(f"✅ تسک '{task.title}' با موفقیت ایجاد شد. شناسه: {task.id}")
+            print(f"✅ Task '{task.title}' created successfully. ID: {task.id}")
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def list_tasks(self):
         """Display tasks for a project"""
         try:
-            print("\n--- لیست تسک‌ها ---")
-            project_id = int(input("شناسه پروژه: "))
+            print("\n--- Task List ---")
+            project_id = int(input("Project ID: "))
 
             tasks = self.task_service.get_tasks_by_project(project_id)
 
             if not tasks:
-                print("📭 هیچ تسکی برای این پروژه یافت نشد.")
+                print("📭 No tasks found for this project.")
                 return
 
             project = self.project_service.get_project(project_id)
-            print(f"تسک‌های پروژه '{project.name}':")
+            print(f"Tasks for project '{project.name}':")
 
             for task in tasks:
                 deadline_str = (
                     task.deadline.strftime("%Y-%m-%d %H:%M")
                     if task.deadline
-                    else "بدون ددلاین"
+                    else "No deadline"
                 )
                 status_icon = (
                     "🔴"
@@ -178,22 +179,22 @@ class ToDoListCLI:
                 )
                 print(
                     f"{status_icon} {task.id}: {task.title} | "
-                    f"وضعیت: {task.status} | ددلاین: {deadline_str}"
+                    f"Status: {task.status} | Deadline: {deadline_str}"
                 )
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def update_task(self):
         """Handle task update"""
         try:
-            print("\n--- ویرایش تسک ---")
-            task_id = int(input("شناسه تسک: "))
-            title = input("عنوان جدید تسک: ").strip()
-            description = input("توضیحات جدید تسک: ").strip()
-            status = input("وضعیت جدید (todo/doing/done): ").strip().lower()
+            print("\n--- Edit Task ---")
+            task_id = int(input("Task ID: "))
+            title = input("New task title: ").strip()
+            description = input("New task description: ").strip()
+            status = input("New status (todo/doing/done): ").strip().lower()
 
-            deadline_str = input("ددلاین جدید (YYYY-MM-DD HH:MM یا خالی): ").strip()
+            deadline_str = input("New deadline (YYYY-MM-DD HH:MM or empty): ").strip()
             deadline = None
             if deadline_str:
                 deadline = datetime.strptime(deadline_str, "%Y-%m-%d %H:%M")
@@ -201,60 +202,60 @@ class ToDoListCLI:
             task = self.task_service.update_task(
                 task_id, title, description, status, deadline
             )
-            print(f"✅ تسک '{task.title}' با موفقیت بروزرسانی شد.")
+            print(f"✅ Task '{task.title}' updated successfully.")
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def change_task_status(self):
         """Handle task status change"""
         try:
-            print("\n--- تغییر وضعیت تسک ---")
-            task_id = int(input("شناسه تسک: "))
-            status = input("وضعیت جدید (todo/doing/done): ").strip().lower()
+            print("\n--- Change Task Status ---")
+            task_id = int(input("Task ID: "))
+            status = input("New status (todo/doing/done): ").strip().lower()
 
             task = self.task_service.change_task_status(task_id, status)
-            print(f"✅ وضعیت تسک '{task.title}' به '{status}' تغییر یافت.")
+            print(f"✅ Task '{task.title}' status changed to '{status}'.")
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def delete_task(self):
         """Handle task deletion"""
         try:
-            print("\n--- حذف تسک ---")
-            task_id = int(input("شناسه تسک برای حذف: "))
+            print("\n--- Delete Task ---")
+            task_id = int(input("Task ID to delete: "))
 
             success = self.task_service.delete_task(task_id)
             if success:
-                print("✅ تسک با موفقیت حذف شد.")
+                print("✅ Task deleted successfully.")
             else:
-                print("❌ تسک یافت نشد.")
+                print("❌ Task not found.")
 
         except ValueError as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
     def show_project_stats(self):
         """Display project statistics"""
         try:
-            print("\n--- آمار پروژه ---")
-            project_id = int(input("شناسه پروژه: "))
+            print("\n--- Project Statistics ---")
+            project_id = int(input("Project ID: "))
 
             stats = self.project_service.get_project_stats(project_id)
             project = stats["project"]
 
-            print(f"\nآمار پروژه '{project.name}':")
-            print(f"تعداد کل تسک‌ها: {stats['total_tasks']}")
+            print(f"\nStatistics for project '{project.name}':")
+            print(f"Total tasks: {stats['total_tasks']}")
             for status, count in stats["status_count"].items():
-                status_fa = {
-                    "todo": "در انتظار",
-                    "doing": "در حال انجام",
-                    "done": "انجام شده",
+                status_text = {
+                    "todo": "To Do",
+                    "doing": "In Progress", 
+                    "done": "Completed",
                 }
-                print(f"  {status_fa[status]}: {count}")
+                print(f"  {status_text[status]}: {count}")
 
         except (ValidationError, ValueError) as e:
-            print(f"❌ خطا: {e}")
+            print(f"❌ Error: {e}")
 
 
 def main():

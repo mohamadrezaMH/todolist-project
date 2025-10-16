@@ -10,33 +10,31 @@ class ValidationError(Exception):
 
 
 def validate_text_length(text: str, field_name: str, min_length: int, max_length: int):
-    """Text length validation"""
+    """Validate text length"""
     if not text or len(text.strip()) == 0:
-        raise ValidationError(f"{field_name} نمی‌تواند خالی باشد")
-
+        raise ValidationError(f"{field_name} cannot be empty")
+    
     if len(text) > max_length:
-        raise ValidationError(
-            f"{field_name} نمی‌تواند بیشتر از {max_length} کاراکتر باشد"
-        )
-
+        raise ValidationError(f"{field_name} cannot exceed {max_length} characters")
+    
     if len(text) < min_length:
-        raise ValidationError(f"{field_name} باید حداقل {min_length} کاراکتر باشد")
+        raise ValidationError(f"{field_name} must be at least {min_length} characters")
 
 
 def validate_status(status: str):
-    """Task status validation"""
+    """Validate task status"""
     if status not in Config.VALID_TASK_STATUSES:
         valid_statuses = ", ".join(Config.VALID_TASK_STATUSES)
-        raise ValidationError(f"وضعیت باید یکی از موارد زیر باشد: {valid_statuses}")
+        raise ValidationError(f"Status must be one of: {valid_statuses}")
 
 
 def validate_deadline(deadline: Optional[datetime]):
-    """Deadline date validation"""
+    """Validate deadline date"""
     if deadline and deadline < datetime.now():
-        raise ValidationError("ددلاین نمی‌تواند در گذشته باشد")
+        raise ValidationError("Deadline cannot be in the past")
 
 
-def validate_unique_name(existing_names: list, new_name: str, item_type: str = "پروژه"):
-    """Name uniqueness validation"""
+def validate_unique_name(existing_names: list, new_name: str, item_type: str = "item"):
+    """Validate unique name"""
     if new_name in existing_names:
-        raise ValidationError(f"نام {item_type} باید یکتا باشد")
+        raise ValidationError(f"{item_type} name must be unique")
