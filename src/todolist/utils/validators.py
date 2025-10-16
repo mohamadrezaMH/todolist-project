@@ -5,6 +5,7 @@ from .config import Config
 
 class ValidationError(Exception):
     """Custom validation error"""
+
     pass
 
 
@@ -12,10 +13,12 @@ def validate_text_length(text: str, field_name: str, min_length: int, max_length
     """Text length validation"""
     if not text or len(text.strip()) == 0:
         raise ValidationError(f"{field_name} نمی‌تواند خالی باشد")
-    
+
     if len(text) > max_length:
-        raise ValidationError(f"{field_name} نمی‌تواند بیشتر از {max_length} کاراکتر باشد")
-    
+        raise ValidationError(
+            f"{field_name} نمی‌تواند بیشتر از {max_length} کاراکتر باشد"
+        )
+
     if len(text) < min_length:
         raise ValidationError(f"{field_name} باید حداقل {min_length} کاراکتر باشد")
 
