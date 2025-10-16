@@ -22,9 +22,9 @@ class Project:
 
     def _validate_inputs(self, name: str, description: str):
         """Project input validation"""
-        validate_text_length(name, "نام پروژه", 1, Config.MAX_PROJECT_NAME_LENGTH)
+        validate_text_length(name, "Project name", 1, Config.MAX_PROJECT_NAME_LENGTH)
         validate_text_length(
-            description, "توضیحات پروژه", 1, Config.MAX_PROJECT_DESCRIPTION_LENGTH
+            description, "Project description", 1, Config.MAX_PROJECT_DESCRIPTION_LENGTH
         )
 
     def update(self, name: str, description: str):

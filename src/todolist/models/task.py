@@ -25,9 +25,9 @@ class Task:
         self, title: str, description: str, deadline: Optional[datetime]
     ):
         """Task input validation"""
-        validate_text_length(title, "عنوان تسک", 1, Config.MAX_TASK_TITLE_LENGTH)
+        validate_text_length(title, "Task title", 1, Config.MAX_TASK_TITLE_LENGTH)
         validate_text_length(
-            description, "توضیحات تسک", 1, Config.MAX_TASK_DESCRIPTION_LENGTH
+            description, "Task description", 1, Config.MAX_TASK_DESCRIPTION_LENGTH
         )
         validate_deadline(deadline)
 

@@ -27,7 +27,7 @@ class ProjectService:
 
         # Check unique name
         existing_names = self.project_storage.get_all_names()
-        validate_unique_name(existing_names, name, "project")
+        validate_unique_name(existing_names, name, "Project")
 
         project = Project(name, description)
         project_id = self.project_storage.add(project)
