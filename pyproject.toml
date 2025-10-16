@@ -1,0 +1,31 @@
+[project]
+name = "todolist"
+version = "0.1.0"
+description = "A simple ToDoList application with Python OOP"
+authors = [
+    {name = "mohamadrezaMH",email = "mohamadreza.mh1783@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=8.4.2,<9.0.0)",
+    "black (>=25.9.0,<26.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)"
+]
+
+
+
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
