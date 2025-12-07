@@ -1,5 +1,5 @@
 from datetime import datetime
-from .storage.in_memory_storage import ProjectStorage, TaskStorage
+from .repositories.in_memory_storage import ProjectStorage, TaskStorage
 from .services.project_service import ProjectService
 from .services.task_service import TaskService
 from .utils.validators import ValidationError

@@ -1,6 +1,6 @@
 from typing import List, Optional
 from ..models.project import Project
-from ..storage.in_memory_storage import ProjectStorage, TaskStorage
+from ..repositories.in_memory_storage import ProjectStorage, TaskStorage
 from ..utils.validators import ValidationError, validate_unique_name
 from ..utils.config import Config
 

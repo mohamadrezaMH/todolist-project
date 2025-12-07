@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 from ..models.task import Task
-from ..storage.in_memory_storage import TaskStorage
+from ..repositories.in_memory_storage import TaskStorage
 from ..utils.validators import ValidationError, validate_status
 from ..utils.config import Config
 

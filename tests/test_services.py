@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime, timedelta
-from src.todolist.storage.in_memory_storage import ProjectStorage, TaskStorage
+from src.todolist.repositories.in_memory_storage import ProjectStorage, TaskStorage
 from src.todolist.services.project_service import ProjectService
 from src.todolist.services.task_service import TaskService
 from src.todolist.utils.validators import ValidationError
