@@ -4,6 +4,10 @@ from .session import engine
 
 def init_database():
     """Create all tables in the database"""
+    # Import models inside function to avoid circular imports
+    from ..models.project import Project
+    from ..models.task import Task
+    
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
     print("✅ Database tables created successfully!")

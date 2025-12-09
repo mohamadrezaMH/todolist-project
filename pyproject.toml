@@ -6,6 +6,12 @@ authors = ["mohamadrezaMH <mohamadreza.mh1783@gmail.com>"]
 
 readme = "README.md"
 
+
+[tool.poetry.scripts]
+todolist = "todolist.main:main"
+todolist-autoclose = "todolist.commands.autoclose_overdue:auto_close_overdue_tasks"
+todolist-scheduler = "todolist.commands.scheduler:run_scheduler"
+
 [tool.poetry.dependencies]
 python = "^3.8.1"
 python-dotenv = "^1.0.0"
