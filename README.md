@@ -230,4 +230,3 @@ This project demonstrates:
 **Built with ❤️ for Software Engineering Course at AUT**
 
 *Azar 1404 - Complete 4-Phase Implementation*
->>>>>>> develop
