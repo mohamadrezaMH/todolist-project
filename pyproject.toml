@@ -2,13 +2,12 @@
 name = "todolist"
 version = "0.2.0"
 description = "A simple ToDoList application with Python OOP and PostgreSQL"
-authors = [
-        {name = "mohamadrezaMH",email = "mohamadreza.mh1783@gmail.com"}
-]
+authors = ["mohamadrezaMH <mohamadreza.mh1783@gmail.com>"]
+
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 python-dotenv = "^1.0.0"
 sqlalchemy = "^2.0.0"
 psycopg2-binary = "^2.9.0"
