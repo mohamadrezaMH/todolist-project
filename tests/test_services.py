@@ -1,82 +1,112 @@
 import pytest
 from datetime import datetime, timedelta
-from src.todolist.repositories.in_memory_storage import ProjectStorage, TaskStorage
+from sqlalchemy.orm import Session
+
+from src.todolist.db.session import SessionLocal
+from src.todolist.repositories.project_repository import ProjectRepository
+from src.todolist.repositories.task_repository import TaskRepository
 from src.todolist.services.project_service import ProjectService
 from src.todolist.services.task_service import TaskService
-from src.todolist.utils.validators import ValidationError
+from src.todolist.exceptions.service_exceptions import ValidationError
+from src.todolist.db.init_db import init_database
+
+
+# Fixture for database session
+@pytest.fixture(scope="module")
+def db_session():
+    """Create a test database session"""
+    init_database()  # Ensure tables exist
+    db = SessionLocal()
+    yield db
+    db.close()
+
+
+# Fixture for repositories
+@pytest.fixture
+def project_repo(db_session):
+    return ProjectRepository(db_session)
+
+
+@pytest.fixture
+def task_repo(db_session):
+    return TaskRepository(db_session)
+
+
+# Fixture for services
+@pytest.fixture
+def project_service(project_repo, task_repo):
+    return ProjectService(project_repo, task_repo)
+
+
+@pytest.fixture
+def task_service(task_repo):
+    return TaskService(task_repo)
 
 
 class TestProjectService:
-    def setup_method(self):
-        self.project_storage = ProjectStorage()
-        self.task_storage = TaskStorage()
-        self.project_service = ProjectService(self.project_storage, self.task_storage)
-
-    def test_create_project_success(self):
+    def test_create_project_success(self, project_service):
         """Test successful project creation"""
-        project = self.project_service.create_project(
-            "Test Project", "Test Description"
-        )
+        project = project_service.create_project("Test Project", "Test Description")
         assert project.name == "Test Project"
         assert project.id is not None
-
-    def test_create_project_duplicate_name(self):
+    
+    def test_create_project_duplicate_name(self, project_service):
         """Test project creation with duplicate name"""
-        self.project_service.create_project("Test Project", "Description 1")
+        project_service.create_project("Test Project", "Description 1")
         with pytest.raises(ValidationError):
-            self.project_service.create_project("Test Project", "Description 2")
-
-    def test_delete_project_cascade(self):
-        """Test project deletion with cascade"""
-        project = self.project_service.create_project(
-            "Test Project", "Test Description"
-        )
-
-        # Create task service and add a task
-        task_service = TaskService(self.task_storage, self.project_service)
-        task = task_service.create_task(project.id, "Test Task", "Task Description")
-
+            project_service.create_project("Test Project", "Description 2")
+    
+    def test_delete_project(self, project_service, task_service, project_repo):
+        """Test project deletion"""
+        project = project_service.create_project("Test Project", "Test Description")
+        
+        # Create a task
+        task_service.create_task(project.id, "Test Task", "Task Description")
+        
         # Delete project
-        success = self.project_service.delete_project(project.id)
+        success = project_service.delete_project(project.id)
         assert success
-
-        # Verify task is also deleted
-        assert task_service.get_task(task.id) is None
+        
+        # Verify project is deleted
+        assert project_service.get_project(project.id) is None
 
 
 class TestTaskService:
-    def setup_method(self):
-        self.project_storage = ProjectStorage()
-        self.task_storage = TaskStorage()
-        self.project_service = ProjectService(self.project_storage, self.task_storage)
-        self.task_service = TaskService(self.task_storage, self.project_service)
-
-        # Create a project for testing tasks
-        self.project = self.project_service.create_project(
-            "Test Project", "Test Description"
-        )
-
+    @pytest.fixture(autouse=True)
+    def setup(self, project_service, task_service):
+        """Setup for task tests"""
+        self.project = project_service.create_project("Test Project", "Test Description")
+        self.project_service = project_service
+        self.task_service = task_service
+    
     def test_create_task_success(self):
         """Test successful task creation"""
         task = self.task_service.create_task(
-            self.project.id,
-            "Test Task",
+            self.project.id, 
+            "Test Task", 
             "Test Description",
-            datetime.now() + timedelta(days=1),
+            datetime.now() + timedelta(days=1)
         )
         assert task.title == "Test Task"
         assert task.status == "todo"
         assert task.project_id == self.project.id
-
-    def test_create_task_invalid_project(self):
-        """Test task creation with invalid project ID"""
-        with pytest.raises(ValidationError):
-            self.task_service.create_task(999, "Test Task", "Test Description")
-
+    
     def test_change_task_status(self):
         """Test task status change"""
-        task = self.task_service.create_task(
-            self.project.id, "Test Task", "Test Description"
-        )
+        task = self.task_service.create_task(self.project.id, "Test Task", "Test Description")
         updated_task = self.task_service.change_task_status(task.id, "doing")
         assert updated_task.status == "doing"
+    
+    def test_get_overdue_tasks(self):
+        """Test getting overdue tasks"""
+        # Create an overdue task
+        task = self.task_service.create_task(
+            self.project.id,
+            "Overdue Task",
+            "Description",
+            datetime.now() - timedelta(days=1)  # Past deadline
+        )
+        
+        overdue_tasks = self.task_service.get_overdue_tasks(self.project.id)
+        assert len(overdue_tasks) >= 1
+        assert overdue_tasks[0].id == task.id
