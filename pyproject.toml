@@ -9,6 +9,7 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 todolist = "todolist.main:main"
+todolist-api = "todolist.api.main:app"
 todolist-autoclose = "todolist.commands.autoclose_overdue:auto_close_overdue_tasks"
 todolist-scheduler = "todolist.commands.scheduler:run_scheduler"
 
