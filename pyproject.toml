@@ -1,31 +1,38 @@
-[project]
+[tool.poetry]
 name = "todolist"
-version = "0.1.0"
-description = "A simple ToDoList application with Python OOP"
-authors = [
-    {name = "mohamadrezaMH",email = "mohamadreza.mh1783@gmail.com"}
-]
-readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "python-dotenv (>=1.1.1,<2.0.0)"
-]
+version = "0.2.0"
+description = "A simple ToDoList application with Python OOP and PostgreSQL"
+authors = ["mohamadrezaMH <mohamadreza.mh1783@gmail.com>"]
 
+readme = "README.md"
+
+
+[tool.poetry.scripts]
+todolist = "todolist.main:main"
+todolist-autoclose = "todolist.commands.autoclose_overdue:auto_close_overdue_tasks"
+todolist-scheduler = "todolist.commands.scheduler:run_scheduler"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+python-dotenv = "^1.0.0"
+sqlalchemy = "^2.0.0"
+psycopg2-binary = "^2.9.0"
+alembic = "^1.0.0"
+schedule = "^1.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+black = "^23.0.0"
+flake8 = "^6.0.0"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
-dev = [
-    "pytest (>=8.4.2,<9.0.0)",
-    "black (>=25.9.0,<26.0.0)",
-    "flake8 (>=7.3.0,<8.0.0)"
-]
-
-
-
 
 [tool.black]
 line-length = 88
 target-version = ['py38']
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = "E203, W503"

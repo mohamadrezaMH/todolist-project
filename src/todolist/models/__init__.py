@@ -1,4 +1,2 @@
-from .project import Project
-from .task import Task
-
+# این فایل رو خالی کن یا فقط اینو بذار:
 __all__ = ["Project", "Task"]
