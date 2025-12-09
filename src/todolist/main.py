@@ -33,7 +33,12 @@ class ToDoListCLI:
     
     def run(self):
         """Main application loop"""
-        print("=== ToDoList Application (Phase 2 - RDB) ===")
+        print("=" * 60)
+        print("⚠️  WARNING: CLI interface is deprecated and will be removed in the next release.")
+        print("⚠️  Please use the FastAPI HTTP interface instead.")
+        print("=" * 60)
+        print("\n=== ToDoList Application (Phase 2 - RDB) ===")
+ 
         print("Project and Task Management System with SQLite Database")
         
         while True:

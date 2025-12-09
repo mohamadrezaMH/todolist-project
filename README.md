@@ -1,152 +1,233 @@
-# ToDoList Project - Phase 1
+# 🚀 **ToDoList Project**
 
-A modern Python-based ToDoList application built with Object-Oriented Programming principles and clean architecture.
+A comprehensive ToDoList application built with Python OOP, PostgreSQL/SQLite, FastAPI, and modern software engineering practices across 4 development phases.
 
-## 🚀 Features
+## 📊 **Project Phases Overview**
 
-### Project Management
-- ✅ Create new projects with unique names
-- ✅ Read and list all projects
-- ✅ Update project names and descriptions
-- ✅ Delete projects with cascade task deletion
-- ✅ Configurable project limits via environment variables
+### **Phase 1: OOP & In-Memory Storage**
+- ✅ Object-Oriented Design with clean architecture
+- ✅ Project and Task management with validation
+- ✅ In-memory data storage
+- ✅ CLI interface with English/Persian support
+- ✅ Comprehensive unit testing (12/12 tests)
 
-### Task Management  
-- ✅ Create tasks with titles, descriptions, and deadlines
-- ✅ Update task information and status
-- ✅ Change task status (todo → doing → done)
-- ✅ Delete individual tasks
-- ✅ Task validation and constraints
+### **Phase 2: Database & Repository Pattern**
+- ✅ PostgreSQL/SQLite integration with SQLAlchemy ORM
+- ✅ Repository Pattern implementation
+- ✅ Database migrations with Alembic
+- ✅ Scheduled tasks for auto-closing overdue items
+- ✅ Dependency injection and layered architecture
 
-### Technical Features
-- 🏗️ Clean layered architecture (Models → Services → Storage → CLI)
-- 📝 Comprehensive input validation
-- 🧪 Full test coverage (12 unit tests)
-- ⚙️ Environment-based configuration
-- 🎯 Type hints throughout the codebase
-- 🔧 Poetry for dependency management
+### **Phase 3: REST API with FastAPI**
+- ✅ Full RESTful API implementation
+- ✅ Automatic Swagger/OpenAPI documentation
+- ✅ Pydantic models for validation
+- ✅ Async endpoint support
+- ✅ CLI deprecation with migration path
 
-## 📋 Prerequisites
+### **Phase 4: API Testing with Postman**
+- ✅ Postman workspace and collection setup
+- ✅ Environment variable management
+- ✅ Complete endpoint testing suite
+- ✅ Automated test runs
 
-- Python 3.8 or higher
-- Poetry (for dependency management)
-
-## 🛠️ Installation & Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <https://github.com/mohamadrezaMH/todolist-project>
-   cd todolist-project
-   ```
-
-2. **Install dependencies with Poetry**
-   ```bash
-   poetry install
-   ```
-
-3. **Set up environment configuration**
-   ```bash
-   cp .env.example .env
-   # Edit .env file with your preferred limits
-   ```
-
-4. **Run the application**
-   ```bash
-   poetry run python -m src.todolist.main
-   ```
-
-## 🎮 Usage Examples
-
-### Creating a Project
-```
---- Main Menu ---
-1. Create New Project
-> 1
-Project name: Work Tasks
-Project description: Tasks related to work projects
-✅ Project 'Work Tasks' created successfully. ID: 1
-```
-
-### Adding a Task
-```
-5. Create New Task
-> 5
-Project ID: 1
-Task title: Complete Phase 1
-Task description: Finish the first phase of ToDoList project
-Deadline (YYYY-MM-DD HH:MM or empty): 2024-12-31 18:00
-✅ Task 'Complete Phase 1' created successfully. ID: 1
-```
-
-### Changing Task Status
-```
-8. Change Task Status
-> 8
-Task ID: 1
-New status (todo/doing/done): doing
-✅ Task 'Complete Phase 1' status changed to 'doing'.
-```
-
-## 🏗️ Project Architecture
+## 🏗️ **Project Structure**
 
 ```
 src/todolist/
-├── models/           # Data models (Project, Task)
-├── services/         # Business logic layer
-├── storage/          # Data storage (In-memory)
-├── utils/            # Utilities & configuration
-└── main.py           # CLI interface
+├── api/                    # FastAPI application
+│   ├── routes/            # API endpoints
+│   ├── schemas/           # Pydantic models
+│   └── dependencies/      # Dependency injection
+├── models/                # SQLAlchemy ORM models
+├── repositories/          # Data access layer
+├── services/              # Business logic
+├── commands/              # CLI commands & scheduled tasks
+├── db/                    # Database configuration
+├── exceptions/            # Custom exceptions
+├── utils/                 # Utilities & config
+└── main.py               # Legacy CLI entry point
+
+alembic/                   # Database migrations
+tests/                     # Unit tests
 ```
 
-## 🧪 Testing
+## 🚀 **Quick Start**
 
-Run the test suite:
+### **Prerequisites**
+- Python 3.8+
+- Poetry (dependency management)
+- Git
+- (Optional) Docker & Docker Compose for PostgreSQL
+
+### **Installation**
+
 ```bash
+# 1. Clone repository
+git clone <https://github.com/mohamadrezaMH/todolist-project>
+cd todolist-project
+
+# 2. Install dependencies
+poetry install
+
+# 3. Setup environment
+cp .env.example .env
+# Edit .env with your preferences
+
+# 4. Initialize database
+poetry run python -m src.todolist.db.init_db
+
+# 5. Run the application
+```
+
+### **Running the Application**
+
+#### **Option A: FastAPI (Recommended)**
+```bash
+# Start the API server
+poetry run uvicorn src.todolist.api.main:app --reload --port 8000
+
+# Access at:
+# API: http://localhost:8000/api/v1/
+# Docs: http://localhost:8000/docs
+# ReDoc: http://localhost:8000/redoc
+```
+
+#### **Option B: Legacy CLI (Deprecated)**
+```bash
+# CLI interface (deprecated - use API instead)
+poetry run python run_api.py
+```
+
+#### **Option C: Scheduled Tasks**
+```bash
+# Auto-close overdue tasks
+poetry run todolist-autoclose
+
+# Run task scheduler
+poetry run todolist-scheduler --interval 15
+```
+
+## 📡 **API Endpoints**
+
+### **Projects**
+- `GET /api/v1/projects/` - List all projects
+- `POST /api/v1/projects/` - Create new project
+- `GET /api/v1/projects/{id}` - Get project details
+- `PUT /api/v1/projects/{id}` - Update project
+- `DELETE /api/v1/projects/{id}` - Delete project
+- `GET /api/v1/projects/{id}/stats` - Get project statistics
+- `GET /api/v1/projects/{id}/tasks` - Get project tasks
+
+### **Tasks**
+- `GET /api/v1/tasks/` - List all tasks (with filters)
+- `POST /api/v1/tasks/` - Create new task
+- `GET /api/v1/tasks/{id}` - Get task details
+- `PUT /api/v1/tasks/{id}` - Update task
+- `PATCH /api/v1/tasks/{id}/status` - Update task status
+- `DELETE /api/v1/tasks/{id}` - Delete task
+- `GET /api/v1/tasks/overdue/` - Get overdue tasks
+
+## 🧪 **Testing**
+
+```bash
+# Run all tests
 poetry run pytest
-```
 
-Run with coverage:
-```bash
+# Run with coverage
 poetry run pytest --cov=src
+
+# Run specific test file
+poetry run pytest tests/test_models.py
+
+# Test API endpoints
+poetry run pytest tests/test_api.py
 ```
 
-## 🔧 Development
+## 🛠️ **Development Commands**
 
-### Code Formatting
 ```bash
+# Code formatting
 poetry run black src/ tests/
-```
 
-### Code Quality
-```bash
+# Code linting
 poetry run flake8 src/
+
+# Database migrations
+poetry run alembic revision --autogenerate -m "description"
+poetry run alembic upgrade head
+
+# Package management
+poetry add <package>        # Add dependency
+poetry remove <package>     # Remove dependency
+poetry update              # Update dependencies
 ```
 
-### Running Tests
-```bash
-poetry run pytest
-```
+## 📋 **Postman Setup**
 
-## ⚙️ Configuration
+1. **Import Collection**: `ToDoList API v1.postman_collection.json`
+2. **Environment Variables**:
+   - `base_url`: `http://localhost:8000/api/v1`
+   - `base_url_swagger`: `http://localhost:8000`
+3. **Test All Endpoints**: Use the collection runner
 
-Environment variables in `.env`:
+## 🗄️ **Database Configuration**
+
+### **SQLite (Default)**
 ```env
-MAX_NUMBER_OF_PROJECTS=10
-MAX_NUMBER_OF_TASKS=100
+DATABASE_URL=sqlite:///todolist.db
 ```
 
-## 🤝 Contributing
+### **PostgreSQL (Docker)**
+```bash
+# Start PostgreSQL
+docker-compose up -d
+
+# Environment
+DATABASE_URL=postgresql://todolist_user:todolist_password@localhost:5432/todolist
+```
+
+## 📁 **Key Features**
+
+- ✅ **Layered Architecture**: Clear separation of concerns
+- ✅ **Repository Pattern**: Database-agnostic data access
+- ✅ **RESTful API**: Full CRUD operations with validation
+- ✅ **Automated Testing**: Comprehensive test suite
+- ✅ **Database Migrations**: Version-controlled schema changes
+- ✅ **Scheduled Tasks**: Automated background processing
+- ✅ **API Documentation**: Auto-generated OpenAPI/Swagger docs
+- ✅ **Environment Configuration**: 12-factor app compliant
+- ✅ **Type Hints**: Full Python type annotation support
+
+## 🤝 **Contributing**
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'feat: add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## 📄 License
+### **Commit Convention**
+- `feat`: New feature
+- `fix`: Bug fix
+- `refactor`: Code refactoring
+- `docs`: Documentation
+- `test`: Tests
+- `chore`: Maintenance
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 📚 **Learning Outcomes**
+
+This project demonstrates:
+- Modern Python OOP principles
+- Database design with ORM
+- REST API development
+- Software architecture patterns
+- CI/CD and testing practices
+- Professional Git workflow
 
 ---
 
-**Built with ❤️ using Python and Clean Architecture**
+**Built with ❤️ for Software Engineering Course at AUT**
+
+*Azar 1404 - Complete 4-Phase Implementation*
+>>>>>>> develop
