@@ -1,12 +1,20 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from ..utils.config import Config
+import os
 from typing import Iterator
 
+
+# گرفتن URL از محیط یا استفاده از SQLite پیش‌فرض
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "sqlite:///todolist.db"  # فایل در روت پروژه ایجاد می‌شه
+)
+
 engine = create_engine(
-    Config.DATABASE_URL,
-    echo=False,  # برای دیباگ می‌تونی True کنی
-    future=True   # برای SQLAlchemy 2.0
+    DATABASE_URL,
+    echo=False,
+    future=True,
+    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 )
 
 SessionLocal = sessionmaker(
@@ -16,7 +24,7 @@ SessionLocal = sessionmaker(
     expire_on_commit=False
 )
 
-def get_db() ->  Iterator[Session]:
+def get_db() -> Iterator[Session]:
     """Dependency for getting database session"""
     db = SessionLocal()
     try:
