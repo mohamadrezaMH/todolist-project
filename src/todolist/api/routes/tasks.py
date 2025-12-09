@@ -13,7 +13,6 @@ from ...exceptions.repository_exceptions import NotFoundError
 
 router = APIRouter()
 
-
 def get_task_service(db: Session = Depends(get_db)):
     """Dependency for task service"""
     task_repo = TaskRepository(db)

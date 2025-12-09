@@ -4,10 +4,9 @@ import os
 from typing import Iterator
 
 
-# گرفتن URL از محیط یا استفاده از SQLite پیش‌فرض
 DATABASE_URL = os.getenv(
     "DATABASE_URL", 
-    "sqlite:///todolist.db"  # فایل در روت پروژه ایجاد می‌شه
+    "sqlite:///todolist.db"
 )
 
 engine = create_engine(

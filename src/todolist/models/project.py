@@ -18,7 +18,7 @@ class Project(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(Config.MAX_PROJECT_NAME_LENGTH), unique=True, nullable=False)
-    description = Column(String, nullable=False)  # حذف محدودیت طول برای SQLite
+    description = Column(String, nullable=False) 
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
     

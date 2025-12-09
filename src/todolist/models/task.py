@@ -18,7 +18,7 @@ class Task(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(Config.MAX_TASK_TITLE_LENGTH), nullable=False)
-    description = Column(String, nullable=False)  # حذف محدودیت طول
+    description = Column(String, nullable=False) 
     status = Column(String(20), default="todo", nullable=False)
     deadline = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
