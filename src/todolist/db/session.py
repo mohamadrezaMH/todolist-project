@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from ..utils.config import Config
+from typing import Iterator
 
 engine = create_engine(
     Config.DATABASE_URL,
@@ -15,7 +16,7 @@ SessionLocal = sessionmaker(
     expire_on_commit=False
 )
 
-def get_db() -> Session:
+def get_db() ->  Iterator[Session]:
     """Dependency for getting database session"""
     db = SessionLocal()
     try:
