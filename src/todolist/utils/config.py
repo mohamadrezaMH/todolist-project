@@ -1,16 +1,21 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# مسیر دیتابیس SQLite
+BASE_DIR = Path(__file__).parent.parent.parent
+SQLITE_DB_PATH = BASE_DIR / "todolist.db"
+
 
 class Config:
-    """Project settings management class from environment variables"""
+    """Configuration management class"""
     
-    # Database
+    # Database URL - استفاده از SQLite برای سادگی
     DATABASE_URL = os.getenv(
         "DATABASE_URL",
-        "postgresql://todolist_user:todolist_password@localhost:5432/todolist"
+        f"sqlite:///{SQLITE_DB_PATH}"
     )
     
     # Application Limits
